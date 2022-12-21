@@ -39,6 +39,7 @@ func NewDeleteCmd(f cmdutil.Factory, streams genericclioptions.IOStreams) *cobra
 		Example(deleteExample).
 		GVR(types.ClusterGVR()).
 		Factory(f).
+		CustomComplete(builder.WithTarget(nil)).
 		IOStreams(streams).
 		Build(delete.Build)
 }

@@ -35,6 +35,7 @@ import (
 	"k8s.io/kubectl/pkg/util/templates"
 	"k8s.io/utils/strings/slices"
 
+	"github.com/apecloud/kubeblocks/internal/cli/builder"
 	"github.com/apecloud/kubeblocks/internal/cli/types"
 	"github.com/apecloud/kubeblocks/internal/cli/util"
 	"github.com/apecloud/kubeblocks/internal/cli/util/helm"
@@ -314,6 +315,11 @@ func newInstallCmd(f cmdutil.Factory, streams genericclioptions.IOStreams) *cobr
 		Args:    cobra.NoArgs,
 		Example: installExample,
 		Run: func(cmd *cobra.Command, args []string) {
+			factory, err := builder.CompleteTarget(cmd)
+			util.CheckErr(err)
+			if factory != nil {
+				f = factory
+			}
 			util.CheckErr(o.complete(f, cmd))
 			util.CheckErr(o.Run())
 		},
@@ -336,6 +342,11 @@ func newUninstallCmd(f cmdutil.Factory, streams genericclioptions.IOStreams) *co
 		Args:    cobra.NoArgs,
 		Example: uninstallExample,
 		Run: func(cmd *cobra.Command, args []string) {
+			factory, err := builder.CompleteTarget(cmd)
+			util.CheckErr(err)
+			if factory != nil {
+				f = factory
+			}
 			util.CheckErr(o.complete(f, cmd))
 			util.CheckErr(o.precheck())
 			util.CheckErr(o.run())

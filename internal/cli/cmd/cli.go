@@ -28,8 +28,10 @@ import (
 	utilcomp "k8s.io/kubectl/pkg/util/completion"
 	"k8s.io/kubectl/pkg/util/templates"
 
+	"github.com/apecloud/kubeblocks/internal/cli/builder"
 	"github.com/apecloud/kubeblocks/internal/cli/cmd/backupconfig"
 	"github.com/apecloud/kubeblocks/internal/cli/cmd/bench"
+	"github.com/apecloud/kubeblocks/internal/cli/cmd/cloud"
 	"github.com/apecloud/kubeblocks/internal/cli/cmd/cluster"
 	"github.com/apecloud/kubeblocks/internal/cli/cmd/dashboard"
 	"github.com/apecloud/kubeblocks/internal/cli/cmd/kubeblocks"
@@ -75,8 +77,10 @@ A Command Line Interface for KubeBlocks`,
 	kubeConfigFlags.AddFlags(flags)
 	matchVersionKubeConfigFlags := cmdutil.NewMatchVersionFlags(kubeConfigFlags)
 	matchVersionKubeConfigFlags.AddFlags(flags)
+	globalFlags := builder.NewGlobalFlags(matchVersionKubeConfigFlags)
+	globalFlags.AddFlags(flags)
 
-	f := cmdutil.NewFactory(matchVersionKubeConfigFlags)
+	f := cmdutil.NewFactory(globalFlags)
 	ioStreams := genericclioptions.IOStreams{In: os.Stdin, Out: os.Stdout, ErrOut: os.Stderr}
 
 	// Add subcommands
@@ -89,6 +93,7 @@ A Command Line Interface for KubeBlocks`,
 		version.NewVersionCmd(f),
 		backupconfig.NewBackupConfigCmd(f, ioStreams),
 		dashboard.NewDashboardCmd(f, ioStreams),
+		cloud.NewCloudCmd(f, ioStreams),
 	)
 
 	filters := []string{"options"}

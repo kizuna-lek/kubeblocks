@@ -37,6 +37,7 @@ import (
 	"k8s.io/client-go/dynamic"
 	cmdutil "k8s.io/kubectl/pkg/cmd/util"
 
+	"github.com/apecloud/kubeblocks/internal/cli/builder"
 	"github.com/apecloud/kubeblocks/internal/cli/types"
 	"github.com/apecloud/kubeblocks/internal/cli/util"
 )
@@ -108,6 +109,7 @@ func BuildCommand(inputs Inputs) *cobra.Command {
 		Short:   inputs.Short,
 		Example: inputs.Example,
 		Run: func(cmd *cobra.Command, args []string) {
+			util.CheckErr(completeGlobalFlags(cmd, &inputs))
 			util.CheckErr(inputs.BaseOptionsObj.Complete(inputs, args))
 			util.CheckErr(inputs.BaseOptionsObj.Validate(inputs))
 			util.CheckErr(inputs.BaseOptionsObj.Run(inputs))
@@ -117,6 +119,18 @@ func BuildCommand(inputs Inputs) *cobra.Command {
 		inputs.BuildFlags(cmd)
 	}
 	return cmd
+}
+
+func completeGlobalFlags(cmd *cobra.Command, input *Inputs) error {
+	// handle target
+	factory, err := builder.CompleteTarget(cmd)
+	if err != nil {
+		return err
+	}
+	if factory != nil {
+		input.Factory = factory
+	}
+	return nil
 }
 
 func (o *BaseOptions) Complete(inputs Inputs, args []string) error {

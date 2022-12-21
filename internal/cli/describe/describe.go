@@ -31,6 +31,7 @@ import (
 	"k8s.io/kubectl/pkg/describe"
 	utilcomp "k8s.io/kubectl/pkg/util/completion"
 
+	"github.com/apecloud/kubeblocks/internal/cli/builder"
 	"github.com/apecloud/kubeblocks/internal/cli/util"
 )
 
@@ -74,6 +75,13 @@ func (o *Options) Build() *cobra.Command {
 		Short:             o.Short,
 		ValidArgsFunction: utilcomp.ResourceNameCompletionFunc(o.Factory, util.GVRToString(o.GVR)),
 		Run: func(cmd *cobra.Command, args []string) {
+			factory, err := builder.CompleteTarget(cmd)
+			if err != nil {
+				util.CheckErr(err)
+			}
+			if factory != nil {
+				o.Factory = factory
+			}
 			util.CheckErr(o.complete(args))
 			util.CheckErr(o.run())
 		},

@@ -79,6 +79,7 @@ func NewListCmd(f cmdutil.Factory, streams genericclioptions.IOStreams) *cobra.C
 		GVR(types.ClusterGVR()).
 		IOStreams(streams).
 		CustomFlags(customFlags).
+		CustomComplete(builder.WithTarget(nil)).
 		CustomRun(customRun).
 		Build(list.Build)
 }

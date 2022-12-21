@@ -178,6 +178,9 @@ func (i *InstallOpts) Install(cfg *action.Configuration) (string, error) {
 func (i *InstallOpts) tryInstall(cfg *action.Configuration) (string, error) {
 	res, _ := i.getInstalled(cfg)
 	if res != nil {
+		if release.StatusDeployed != res.Info.Status {
+			return "", ErrorChartNotSuccessDeployed
+		}
 		return "", nil
 	}
 
@@ -280,7 +283,7 @@ func (i *InstallOpts) tryUnInstall(cfg *action.Configuration) error {
 	signal.Notify(cSignal, os.Interrupt, syscall.SIGTERM)
 	go func() {
 		<-cSignal
-		fmt.Println("Install has been cancelled")
+		fmt.Println("Uninstall has been cancelled")
 		cancel()
 	}()
 

@@ -89,6 +89,18 @@ var (
 
 	// KubeBlocksChartURL the helm chart for installing kubeblocks
 	KubeBlocksChartURL = "https://apecloud.github.io/helm-charts"
+
+	// ApeCloudIdentityService helm name for installing identity-service
+	ApeCloudIdentityService = "identity-service"
+
+	// ApeCloudChartName helm name for installing cloud services
+	ApeCloudChartName = "apecloud"
+
+	// KubeblockSystemNamespace namespace for installing charts
+	KubeblockSystemNamespace = "kubeblocks-system"
+
+	// ApeCloudChartURL the helm chart for installing cloud services
+	ApeCloudChartURL = "s3://gonglei/dev/cloud-service/"
 )
 
 type BackupJobInfo struct {

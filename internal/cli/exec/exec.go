@@ -32,6 +32,7 @@ import (
 	cmdutil "k8s.io/kubectl/pkg/cmd/util"
 	"k8s.io/kubectl/pkg/cmd/util/podcmd"
 
+	"github.com/apecloud/kubeblocks/internal/cli/builder"
 	"github.com/apecloud/kubeblocks/internal/cli/util"
 )
 
@@ -94,6 +95,13 @@ func (o *ExecOptions) Build(input *ExecInput) *cobra.Command {
 		Short:   o.Input.Short,
 		Example: o.Input.Example,
 		Run: func(cmd *cobra.Command, args []string) {
+			factory, err := builder.CompleteTarget(cmd)
+			if err != nil {
+				util.CheckErr(err)
+			}
+			if factory != nil {
+				o.Factory = factory
+			}
 			util.CheckErr(o.Complete(args))
 			util.CheckErr(o.Validate())
 			util.CheckErr(o.Run())
