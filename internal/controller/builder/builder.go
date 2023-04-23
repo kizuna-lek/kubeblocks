@@ -579,8 +579,8 @@ func BuildConfigMapWithTemplate(configs map[string]string,
 	params BuilderParams,
 	cmName string,
 	configConstraintName string,
-	tplCfg appsv1alpha1.ComponentTemplateSpec) (*corev1.ConfigMap, error) {
-	return BuildConfigMapWithTemplateLow(params.Cluster, params.Component, configs, cmName, configConstraintName, tplCfg)
+	configTemplateSpec appsv1alpha1.ComponentTemplateSpec) (*corev1.ConfigMap, error) {
+	return BuildConfigMapWithTemplateLow(params.Cluster, params.Component, configs, cmName, configConstraintName, configTemplateSpec)
 }
 
 func BuildConfigMapWithTemplateLow(cluster *appsv1alpha1.Cluster,
@@ -588,7 +588,7 @@ func BuildConfigMapWithTemplateLow(cluster *appsv1alpha1.Cluster,
 	configs map[string]string,
 	cmName string,
 	configConstraintName string,
-	tplCfg appsv1alpha1.ComponentTemplateSpec) (*corev1.ConfigMap, error) {
+	configTemplateSpec appsv1alpha1.ComponentTemplateSpec) (*corev1.ConfigMap, error) {
 	const tplFile = "config_template.cue"
 	cueFS, _ := debme.FS(cueTemplates, "cue")
 	cueTpl, err := getCacheCUETplValue(tplFile, func() (*intctrlutil.CUETpl, error) {
@@ -613,9 +613,9 @@ func BuildConfigMapWithTemplateLow(cluster *appsv1alpha1.Cluster,
 			"type":                  component.Type,
 			"characterType":         component.CharacterType,
 			"configName":            cmName,
-			"templateName":          tplCfg.TemplateRef,
+			"templateName":          configTemplateSpec.TemplateRef,
 			"configConstraintsName": configConstraintName,
-			"configTemplateName":    tplCfg.Name,
+			"configTemplateName":    configTemplateSpec.Name,
 		},
 	}
 	configBytes, err := json.Marshal(configMeta)
@@ -643,7 +643,7 @@ func BuildConfigMapWithTemplateLow(cluster *appsv1alpha1.Cluster,
 	return &cm, nil
 }
 
-func BuildCfgManagerContainer(sidecarRenderedParam *cfgcm.CfgManagerBuildParams) (*corev1.Container, error) {
+func BuildCfgManagerContainer(sidecarRenderedParam *cfgcm.CfgManagerBuildParams, component *component.SynthesizedComponent) (*corev1.Container, error) {
 	const tplFile = "config_manager_sidecar.cue"
 	cueFS, _ := debme.FS(cueTemplates, "cue")
 	cueTpl, err := getCacheCUETplValue(tplFile, func() (*intctrlutil.CUETpl, error) {
@@ -671,6 +671,8 @@ func BuildCfgManagerContainer(sidecarRenderedParam *cfgcm.CfgManagerBuildParams)
 	if err = json.Unmarshal(containerStrByte, &container); err != nil {
 		return nil, err
 	}
+
+	injectEnvs(sidecarRenderedParam.Cluster, component, sidecarRenderedParam.EnvConfigName, &container)
 	return &container, nil
 }
 
