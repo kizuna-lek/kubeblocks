@@ -58,22 +58,24 @@ spec:
 `
 
 func TestResourceConstraint_ByClassCPUAndMemory(t *testing.T) {
-	buildClass := func(cpu string, memory string) *appsv1alpha1.ComponentClassInstance {
-		return &appsv1alpha1.ComponentClassInstance{
-			ComponentClass: appsv1alpha1.ComponentClass{
-				CPU:    resource.MustParse(cpu),
-				Memory: resource.MustParse(memory),
+	buildClass := func(cpu string, memory string) *ComponentClassWithRef {
+		return &ComponentClassWithRef{
+			ComponentClassInstance: appsv1alpha1.ComponentClassInstance{
+				ComponentClass: appsv1alpha1.ComponentClass{
+					CPU:    resource.MustParse(cpu),
+					Memory: resource.MustParse(memory),
+				},
 			},
 		}
 	}
-	classes := []*appsv1alpha1.ComponentClassInstance{
+	classes := []*ComponentClassWithRef{
 		buildClass("1", "2Gi"),
 		buildClass("1", "1Gi"),
 		buildClass("2", "0.5Gi"),
 		buildClass("1", "1Gi"),
 		buildClass("0.5", "10Gi"),
 	}
-	sort.Sort(ByClassCPUAndMemory(classes))
+	sort.Sort(ByClassResource(classes))
 	candidate := classes[0]
 	if !candidate.CPU.Equal(resource.MustParse("0.5")) || !candidate.Memory.Equal(resource.MustParse("10Gi")) {
 		t.Errorf("case failed")
@@ -86,13 +88,12 @@ func TestResourceConstraint_ConstraintList(t *testing.T) {
 	if err != nil {
 		panic("Failed to unmarshal resource constraint: %v" + err.Error())
 	}
-	var constraints []ConstraintWithName
+	var constraints []appsv1alpha1.ResourceConstraint
 	for _, constraint := range cf.Spec.Constraints {
-		constraints = append(constraints, ConstraintWithName{Name: cf.Name, Constraint: constraint})
+		constraints = append(constraints, constraint)
 	}
-	resource.MustParse("200Mi")
 	sort.Sort(ByConstraintList(constraints))
-	cpu, memory := GetMinCPUAndMemory(constraints[0].Constraint)
-	assert.Equal(t, cpu.Cmp(resource.MustParse("0.1")) == 0, true)
-	assert.Equal(t, memory.Cmp(resource.MustParse("20Mi")) == 0, true)
+	resources := constraints[0].GetMinimalResources()
+	assert.Equal(t, resources.Cpu().Cmp(resource.MustParse("0.1")) == 0, true)
+	assert.Equal(t, resources.Memory().Cmp(resource.MustParse("20Mi")) == 0, true)
 }

@@ -124,13 +124,11 @@ func TestResourceConstraints(t *testing.T) {
 			cpu    = resource.MustParse(item.cpu)
 			memory = resource.MustParse(item.memory)
 		)
-		requirements := &corev1.ResourceRequirements{
-			Requests: map[corev1.ResourceName]resource.Quantity{
-				corev1.ResourceCPU:    cpu,
-				corev1.ResourceMemory: memory,
-			},
+		requests := corev1.ResourceList{
+			corev1.ResourceCPU:    cpu,
+			corev1.ResourceMemory: memory,
 		}
-		assert.Equal(t, item.expect, len(cf.FindMatchingConstraints(requirements)) > 0)
+		assert.Equal(t, item.expect, len(cf.FindMatchingConstraints(requests)) > 0)
 
 		class := &ComponentClassInstance{
 			ComponentClass: ComponentClass{
