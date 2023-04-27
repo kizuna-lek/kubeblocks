@@ -64,10 +64,10 @@ func runConfigManagerCommand(ctx context.Context, opt *VolumeWatcherOpts) error 
 
 	logger = zapLog.Sugar()
 	cfgcore.SetLogger(zapLog)
+
 	if err := checkOptions(opt); err != nil {
 		return err
 	}
-
 	if opt.BackupPath == "" {
 		tmpDir, err := os.MkdirTemp(os.TempDir(), "reload-backup-")
 		if err != nil {
@@ -165,6 +165,9 @@ func logUnaryServerInterceptor(ctx context.Context, req interface{}, info *grpc.
 }
 
 func checkOptions(opt *VolumeWatcherOpts) error {
+	if len(opt.VolumeDirs) == 0 && !opt.ServiceOpt.RemoteOnlineUpdateEnable {
+		return cfgutil.MakeError("require volume directory is null.")
+	}
 	if opt.CombConfig == "" {
 		return cfgutil.MakeError("required config is empty.")
 	}
