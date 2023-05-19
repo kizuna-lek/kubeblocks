@@ -260,7 +260,7 @@ statement_timeout = '0'
 superuser_reserved_connections = '20'
 synchronize_seqscans = 'True'
 
-# rds off ，patroni off for Extreme Performance
+# rds off , patroni off for Extreme Performance
 synchronous_commit = 'off'
 # synchronous_standby_names=''
 tcp_keepalives_count = '10'
