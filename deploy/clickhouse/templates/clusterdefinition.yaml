@@ -39,8 +39,6 @@ spec:
           templateRef: clickhouse-tpl
           volumeName: config
           namespace: {{ .Release.Namespace }}
-      constraints:
-        numberOfOccurrence: OnceOrMore
       service:
         ports:
           - name: http
@@ -176,8 +174,6 @@ spec:
           - name: http-metrics
             targetPort: http-metrics
             port: 8001
-      constraints:
-        numberOfOccurrence: ZeroOrOnce
       podSpec:
         securityContext:
           fsGroup: 1001
@@ -273,13 +269,9 @@ spec:
           - name: tcp-client
             port: 2181
             targetPort: client
-            nodePort: null
           - name: metrics
             port: 9141
             targetPort: metrics
-            nodePort: null
-      constraints:
-        numberOfOccurrence: ZeroOrOnce
       podSpec:
         securityContext:
           fsGroup: 1001
