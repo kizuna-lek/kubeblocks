@@ -33,6 +33,8 @@ import (
 	utilcomp "k8s.io/kubectl/pkg/util/completion"
 	"k8s.io/kubectl/pkg/util/templates"
 
+	infras "github.com/apecloud/kubeblocks/internal/cli/cmd/infrastructure"
+
 	"github.com/apecloud/kubeblocks/internal/cli/cmd/addon"
 	"github.com/apecloud/kubeblocks/internal/cli/cmd/alert"
 	"github.com/apecloud/kubeblocks/internal/cli/cmd/bench"
@@ -153,6 +155,7 @@ A Command Line Interface for KubeBlocks`,
 		migration.NewMigrationCmd(f, ioStreams),
 		plugin.NewPluginCmd(ioStreams),
 		fault.NewFaultCmd(f, ioStreams),
+		infras.NewInfraCmd(ioStreams),
 	)
 
 	filters := []string{"options"}
