@@ -119,9 +119,3 @@ spec:
 
   installable:
     autoInstall: {{ index .Values "external-dns" "enabled" }}
-    selectors:
-    - key: KubeGitVersion
-      operator: Contains
-      values:
-      - eks
-
