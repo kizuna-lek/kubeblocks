@@ -25,6 +25,7 @@ spec:
         --set triggerLoopOnEvent=true \
         --set interval=5m \
         --set registry=txt \
+        --set labelFilter=app.kubernetes.io/managed-by=kubeblocks \
         --set domainFilters={{ index .Values "external-dns" "domain" }} \
         --set aws.credentials.accessKey=${accessKey} \
         --set aws.credentials.secretKey=${secretKey} \
@@ -43,6 +44,7 @@ spec:
         --set triggerLoopOnEvent=true \
         --set interval=5m \
         --set registry=txt \
+        --set labelFilter=app.kubernetes.io/managed-by=kubeblocks \
         --set domainFilters={{ index .Values "external-dns" "domain" }} \
         --set alibabacloud.accessKeyId=${accessKeyId} \
         --set alibabacloud.accessKeySecret=${accessKeySecret} \
@@ -61,6 +63,7 @@ spec:
         --set triggerLoopOnEvent=true \
         --set interval=5m \
         --set registry=txt \
+        --set labelFilter=app.kubernetes.io/managed-by=kubeblocks \
         --set domainFilters={{ index .Values "external-dns" "domain" }} \
         --set google.project=${project} \
         --set google.serviceAccountSecret=${serviceAccountSecret} \
@@ -83,6 +86,7 @@ spec:
         --set triggerLoopOnEvent=true \
         --set interval=5m \
         --set registry=txt \
+        --set labelFilter=app.kubernetes.io/managed-by=kubeblocks \
         --set domainFilters={{ index .Values "external-dns" "domain" }} \
         --set azure.subscriptionId=${subscriptionId} \
         --set azure.resourceGroup=${resourceGroup}
@@ -95,6 +99,7 @@ spec:
         --set triggerLoopOnEvent=true \
         --set interval=5m \
         --set registry=txt \
+        --set labelFilter=app.kubernetes.io/managed-by=kubeblocks \
         --set domainFilters={{ index .Values "external-dns" "domain" }} \
         --set azure.subscriptionId=${subscriptionId} \
         --set azure.resourceGroup=${resourceGroup}
