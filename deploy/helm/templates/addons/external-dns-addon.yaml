@@ -21,6 +21,9 @@ spec:
 
     kbcli addon enable external-dns --set provider=aws \
         --set source=service \
+        --set policy=sync \
+        --set triggerLoopOnEvent=true \
+        --set interval=5m \
         --set registry=txt \
         --set domainFilters={{ index .Values "external-dns" "domain" }} \
         --set aws.credentials.accessKey=${accessKey} \
@@ -36,6 +39,9 @@ spec:
 
     kbcli addon enable external-dns --set provider=alibabacloud \
         --set source=service \
+        --set policy=sync \
+        --set triggerLoopOnEvent=true \
+        --set interval=5m \
         --set registry=txt \
         --set domainFilters={{ index .Values "external-dns" "domain" }} \
         --set alibabacloud.accessKeyId=${accessKeyId} \
@@ -51,6 +57,9 @@ spec:
 
     kbcli addon enable external-dns --set provider=google \
         --set source=service \
+        --set policy=sync \
+        --set triggerLoopOnEvent=true \
+        --set interval=5m \
         --set registry=txt \
         --set domainFilters={{ index .Values "external-dns" "domain" }} \
         --set google.project=${project} \
@@ -70,6 +79,9 @@ spec:
 
     kbcli addon enable external-dns --set provider=azure-private-dns \
         --set source=service \
+        --set policy=sync \
+        --set triggerLoopOnEvent=true \
+        --set interval=5m \
         --set registry=txt \
         --set domainFilters={{ index .Values "external-dns" "domain" }} \
         --set azure.subscriptionId=${subscriptionId} \
@@ -79,6 +91,9 @@ spec:
 
     kbcli addon enable external-dns --set provider=azure \
         --set source=service \
+        --set policy=sync \
+        --set triggerLoopOnEvent=true \
+        --set interval=5m \
         --set registry=txt \
         --set domainFilters={{ index .Values "external-dns" "domain" }} \
         --set azure.subscriptionId=${subscriptionId} \
