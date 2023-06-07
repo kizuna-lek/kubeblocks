@@ -358,35 +358,10 @@ type ClusterComponentDefinition struct {
 	// +listMapKey=key
 	// +optional
 	CustomLabelSpecs []CustomLabelSpec `json:"customLabelSpecs,omitempty"`
-
-	// constraints is used to describe the constraints of the component.
-	Constraints *Constraints `json:"constraints,omitempty"`
 	// componentRef is used to select the component to be referenced.
 	// +optional
 	ComponentRef []*ComponentRef `json:"componentRef,omitempty"`
 }
-
-// Constraints is used to describe the constraints of the component.
-type Constraints struct {
-	// numberOfOccurrence is the number of occurrences of the component.
-	// +kubebuilder:validation:Enum={ZeroOrOnce,ExactlyOnce, OnceOrMore, Unlimited}
-	// +default="Unlimited"
-	// +optional
-	NumberOfOccurrence CompNumberOfOccType `json:"numberOfOccurrence,omitempty"`
-}
-
-type CompNumberOfOccType string
-
-const (
-	// ZeroOrOnce means the component can be zero or once.
-	ZeroOrOnce CompNumberOfOccType = "ZeroOrOnce"
-	// ExactlyOnce means the component can be exactly once.
-	ExactlyOnce CompNumberOfOccType = "ExactlyOnce"
-	// OnceOrMore means the component can be once or more.
-	OnceOrMore CompNumberOfOccType = "OnceOrMore"
-	// Unlimited means the component can be unlimited.
-	Unlimited CompNumberOfOccType = "Unlimited"
-)
 
 type ComponentRef struct {
 	// componentName is the name of the component to select.

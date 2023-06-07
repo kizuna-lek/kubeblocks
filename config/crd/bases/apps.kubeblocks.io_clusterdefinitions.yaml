@@ -380,20 +380,6 @@ spec:
                       required:
                       - leader
                       type: object
-                    constraints:
-                      description: constraints is used to describe the constraints
-                        of the component.
-                      properties:
-                        numberOfOccurrence:
-                          description: numberOfOccurrence is the number of occurrences
-                            of the component.
-                          enum:
-                          - ZeroOrOnce
-                          - ExactlyOnce
-                          - OnceOrMore
-                          - Unlimited
-                          type: string
-                      type: object
                     customLabelSpecs:
                       description: customLabelSpecs is used for custom label tags
                         which you want to add to the component resources.

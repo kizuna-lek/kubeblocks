@@ -410,7 +410,7 @@ var _ = Describe("ComponentRef Fields Tests", func() {
 
 			// append component ref to cluster definition
 			clusterCompDef.ComponentRef = append(clusterCompDef.ComponentRef, componentRef)
-			err := buildCompoentRef(clusterDef, cluster, clusterCompDef, clusterComp, component)
+			err := buildComponentRef(clusterDef, cluster, clusterCompDef, clusterComp, component)
 			Expect(err).To(BeNil())
 			Expect(component.ComponentRefEnvs).NotTo(BeEmpty())
 			Expect(component.ComponentRefEnvs).To(HaveLen(6))
@@ -431,7 +431,7 @@ var _ = Describe("ComponentRef Fields Tests", func() {
 
 			// append component ref to cluster definition
 			clusterComp.ComponentRef = append(clusterComp.ComponentRef, componentRef)
-			err := buildCompoentRef(clusterDef, cluster, clusterCompDef, clusterComp, component)
+			err := buildComponentRef(clusterDef, cluster, clusterCompDef, clusterComp, component)
 			Expect(err).To(BeNil())
 			Expect(component.ComponentRefEnvs).NotTo(BeEmpty())
 			Expect(component.ComponentRefEnvs).To(HaveLen(6))
@@ -460,7 +460,7 @@ var _ = Describe("ComponentRef Fields Tests", func() {
 			compRefCopy.ServiceRefs = nil
 			clusterComp.ComponentRef = append(clusterComp.ComponentRef, compRefCopy)
 
-			err := buildCompoentRef(clusterDef, cluster, clusterCompDef, clusterComp, component)
+			err := buildComponentRef(clusterDef, cluster, clusterCompDef, clusterComp, component)
 			Expect(err).To(BeNil())
 			Expect(component.ComponentRefEnvs).To(HaveLen(2))
 		})

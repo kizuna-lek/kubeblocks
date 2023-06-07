@@ -256,15 +256,6 @@ func appendContainerVolumeMounts(containers []corev1.Container, targetContainerN
 	return containers
 }
 
-func (factory *MockClusterDefFactory) AddConstraints(constraint *appsv1alpha1.Constraints) *MockClusterDefFactory {
-	comp := factory.getLastCompDef()
-	if comp == nil {
-		return factory
-	}
-	comp.Constraints = constraint
-	return factory
-}
-
 func (factory *MockClusterDefFactory) AddComponentRef(ref *appsv1alpha1.ComponentRef) *MockClusterDefFactory {
 	comp := factory.getLastCompDef()
 	if comp == nil {

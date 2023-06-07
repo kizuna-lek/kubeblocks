@@ -29,7 +29,7 @@ import (
 	appsv1alpha1 "github.com/apecloud/kubeblocks/apis/apps/v1alpha1"
 )
 
-func buildCompoentRef(clusterDef *appsv1alpha1.ClusterDefinition,
+func buildComponentRef(clusterDef *appsv1alpha1.ClusterDefinition,
 	cluster *appsv1alpha1.Cluster,
 	clusterCompDef *appsv1alpha1.ClusterComponentDefinition,
 	clusterComp *appsv1alpha1.ClusterComponentSpec,
@@ -189,7 +189,7 @@ func getServicePort(serviceSpec *appsv1alpha1.ServiceSpec, serviceName string) (
 	return nil, fmt.Errorf("service %s not found", serviceName)
 }
 
-// extractFieldPathAsString extract fieldPath value from referredComponent
+// extractFieldPathAsString extracts fieldPath value from referredComponent
 func extractFieldPathAsString(object *appsv1alpha1.ClusterComponentSpec, fieldPath string) (string, error) {
 	switch fieldPath {
 	case "primaryIndex":

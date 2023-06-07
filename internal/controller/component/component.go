@@ -178,7 +178,7 @@ func buildComponent(reqCtx intctrlutil.RequestCtx,
 
 	replaceContainerPlaceholderTokens(component, GetEnvReplacementMapForConnCredential(cluster.GetName()))
 
-	if err = buildCompoentRef(&clusterDef, &cluster, clusterCompDefObj, &clusterCompSpec, component); err != nil {
+	if err = buildComponentRef(&clusterDef, &cluster, clusterCompDefObj, &clusterCompSpec, component); err != nil {
 		reqCtx.Log.Error(err, "failed to merge componentRef")
 		return nil, err
 	}
