@@ -87,8 +87,6 @@ spec:
         - name: {{ $name }}
           filePathPattern: {{ $pattern }}
         {{- end }}
-      constraints:
-        numberOfOccurrence: ExactlyOnce
       volumeTypes:
         - name: data
           type: data
@@ -175,8 +173,6 @@ spec:
     - name: redis-sentinel
       workloadType: Stateful
       characterType: redis
-      constraints:
-        numberOfOccurrence: ExactlyOnce
       service:
         ports:
           - name: redis-sentinel

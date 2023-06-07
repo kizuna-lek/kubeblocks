@@ -50,18 +50,15 @@ func buildComponentRef(clusterDef *appsv1alpha1.ClusterDefinition,
 		if compRef == nil {
 			continue
 		}
-
-		referredCompName := compRef.ComponentName
-		referredCompDefName := compRef.ComponentDefName
+		selector := compRef.ComponentSelector
 		// get referenced component by componentDefName and componentName
-		referredComponent, referredComponentDef, err := getReferredComponent(clusterDef, cluster, referredCompDefName, referredCompName)
+		referredComponent, referredComponentDef, err := getReferredComponent(clusterDef, cluster, selector)
 		if err != nil {
-			if compRef.ReferenceStrategy == appsv1alpha1.RequiredStrategy {
-				return err
-			} else {
-				klog.V(4).Infof("ComponentRef %s/%s is not found, but it is not required, so ignore it", referredCompDefName, referredCompName)
+			if compRef.FailurePolicy == appsv1alpha1.FailurePolicyIgnore {
+				klog.Errorf("ComponentSelector: %s/%s failes to match,", selector.ComponentDefName, selector.ComponentName)
 				continue
 			}
+			return err
 		}
 
 		if fieldEnvs, err := resolveFieldRefs(compRef.FieldRefs, referredComponent); err != nil {
@@ -150,7 +147,9 @@ func resolveResourceFieldRefs(resourceFieldRefs []*appsv1alpha1.ComponentResourc
 }
 
 func getReferredComponent(clusterDef *appsv1alpha1.ClusterDefinition, cluster *appsv1alpha1.Cluster,
-	compDefName string, compName string) (*appsv1alpha1.ClusterComponentSpec, *appsv1alpha1.ClusterComponentDefinition, error) {
+	selector appsv1alpha1.ComponentSelector) (*appsv1alpha1.ClusterComponentSpec, *appsv1alpha1.ClusterComponentDefinition, error) {
+	compName := selector.ComponentName
+	compDefName := selector.ComponentDefName
 	if len(compName) > 0 {
 		// get component by name
 		comp := cluster.Spec.GetComponentByName(compName)

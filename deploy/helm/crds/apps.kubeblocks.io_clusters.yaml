@@ -179,19 +179,33 @@ spec:
                         componentRef defined in ClusterComponentSpec will override
                         componentRef defined in ClusterDefinition.
                       items:
+                        description: ComponentRef is used to select the component
+                          and its fields to be referenced.
                         properties:
-                          componentDefName:
-                            description: componentDefName is the name of the componentDef
-                              to select.
-                            type: string
-                          componentName:
-                            description: componentName is the name of the component
-                              to select.
+                          componentSelector:
+                            description: componentSelector is the selector of the
+                              component.
+                            properties:
+                              componentDefName:
+                                description: componentDefName is the name of the componentDef
+                                  to select.
+                                type: string
+                              componentName:
+                                description: componentName is the name of the component
+                                  to select.
+                                type: string
+                            type: object
+                          failurePolicy:
+                            description: failurePolicy is the failure policy of the
+                              component. If failed to find the component, the failure
+                              policy will be used.
                             type: string
                           fieldRefs:
-                            description: FieldRefs is the field of the component to
+                            description: fieldRefs is the field of the component to
                               select.
                             items:
+                              description: ComponentFieldRef is used to select the
+                                field of the component to be referenced.
                               properties:
                                 envName:
                                   description: envName is the name of the env to be
@@ -207,17 +221,12 @@ spec:
                               - fieldPath
                               type: object
                             type: array
-                          referenceStrategy:
-                            description: referenceStrategy is the strategy of the
-                              component to select.
-                            enum:
-                            - optional
-                            - required
-                            type: string
                           resourceFieldRefs:
                             description: resourceFieldRef is the field of the resource
                               to select.
                             items:
+                              description: ComponentResourceFieldRef is used to select
+                                the field of the resource to be referenced.
                               properties:
                                 divisor:
                                   anyOf:
@@ -244,6 +253,8 @@ spec:
                             description: serviceFieldRef is the field of the service
                               to select.
                             items:
+                              description: ComponentServiceRef is used to select service
+                                to be referenced.
                               properties:
                                 envNamePrefix:
                                   description: envNamePrefix is the prefix of the
@@ -259,6 +270,8 @@ spec:
                               - serviceName
                               type: object
                             type: array
+                        required:
+                        - componentSelector
                         type: object
                       type: array
                     enabledLogs:

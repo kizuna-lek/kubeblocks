@@ -363,18 +363,27 @@ type ClusterComponentDefinition struct {
 	ComponentRef []*ComponentRef `json:"componentRef,omitempty"`
 }
 
+// FailurePolicyType specifies the type of failure policy
+type FailurePolicyType string
+
+const (
+	// Ignore means that an error will be ignore but logged.
+	FailurePolicyIgnore FailurePolicyType = "Ignore"
+	// ReportError means that an error will be reported.
+	FailurePolicyFail FailurePolicyType = "Fail"
+)
+
+// ComponentRef is used to select the component and its fields to be referenced.
 type ComponentRef struct {
-	// componentName is the name of the component to select.
+	// componentSelector is the selector of the component.
+	// +kubebuilder:validation:Required
+	ComponentSelector ComponentSelector `json:"componentSelector"`
+	// failurePolicy is the failure policy of the component.
+	// If failed to find the component, the failure policy will be used.
 	// +optional
-	ComponentName string `json:"componentName,omitempty"`
-	// componentDefName is the name of the componentDef to select.
-	// +optional
-	ComponentDefName string `json:"componentDefName,omitempty"`
-	// referenceStrategy is the strategy of the component to select.
-	// +default="Required"
-	// +optional
-	ReferenceStrategy ComponentReferenceStrategy `json:"referenceStrategy,omitempty"`
-	// FieldRefs is the field of the component to select.
+	// +default=Fail
+	FailurePolicy FailurePolicyType `json:"failurePolicy,omitempty"`
+	// fieldRefs is the field of the component to select.
 	// +optional
 	FieldRefs []*ComponentFieldRef `json:"fieldRefs,omitempty"`
 	// serviceFieldRef is the field of the service to select.
@@ -385,6 +394,18 @@ type ComponentRef struct {
 	ResourceFieldRefs []*ComponentResourceFieldRef `json:"resourceFieldRefs,omitempty"`
 }
 
+// ComponentSelector is used to select the component to be referenced.
+// Either componentName or componentDefName must be specified.
+type ComponentSelector struct {
+	// componentName is the name of the component to select.
+	// +optional
+	ComponentName string `json:"componentName,omitempty"`
+	// componentDefName is the name of the componentDef to select.
+	// +optional
+	ComponentDefName string `json:"componentDefName,omitempty"`
+}
+
+// ComponentFieldRef is used to select the field of the component to be referenced.
 type ComponentFieldRef struct {
 	// envName is the name of the env to be injected.
 	// +kubebuilder:validation:Required
@@ -395,16 +416,7 @@ type ComponentFieldRef struct {
 	FieldPath string `json:"fieldPath"`
 }
 
-// ComponentReferenceStrategy defines the strategy of the component to select.
-// +enum
-// +kubebuilder:validation:Enum={optional,required}
-type ComponentReferenceStrategy string
-
-const (
-	OptionalStrategy ComponentReferenceStrategy = "optional"
-	RequiredStrategy ComponentReferenceStrategy = "required"
-)
-
+// ComponentResourceFieldRef is used to select the field of the resource to be referenced.
 type ComponentResourceFieldRef struct {
 	// envName is the name of the env to be injected.
 	// +kubebuilder:validation:Required
@@ -418,6 +430,7 @@ type ComponentResourceFieldRef struct {
 	Divisor resource.Quantity `json:"divisor,omitempty"`
 }
 
+// ComponentServiceRef is used to select service to be referenced.
 type ComponentServiceRef struct {
 	// envNamePrefix is the prefix of the env to be injected.
 	// +kubebuilder:validation:Required

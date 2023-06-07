@@ -288,8 +288,8 @@ func validateConfigTemplateList(ctpls []ComponentConfigSpec) error {
 }
 
 func (r ComponentRef) validate(allErrs *field.ErrorList) {
-	if len(r.ComponentDefName) == 0 && len(r.ComponentName) == 0 {
-		*allErrs = append(*allErrs, field.Invalid(field.NewPath("componentDefName"), r.ComponentDefName,
+	if len(r.ComponentSelector.ComponentDefName) == 0 && len(r.ComponentSelector.ComponentName) == 0 {
+		*allErrs = append(*allErrs, field.Invalid(field.NewPath("componentDefName"), r.ComponentSelector.ComponentDefName,
 			"componentDefName and componentName cannot be empty at the same time"))
 	}
 }
